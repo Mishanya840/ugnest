@@ -23,6 +23,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Loggable {
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
+    var currState = currentState;
+    if (event is SelectedLoginByNumber && currState is WelcomeLoginState) {
+      yield PhoneNumberFormLoginState();
+    }
+
     var curState = currentState;
     if (event is LoginButtonPressed && curState is LoginUserLoginState) {
       //yield LoginLoading();

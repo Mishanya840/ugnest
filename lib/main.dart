@@ -56,6 +56,8 @@ void main() {
 }
 
 class App extends StatelessWidget {
+  static const _primarySwatchValue = 0x038992;
+
   final AuthRepository authRepository;
 
   App({Key key, @required this.authRepository}) : super(key: key);
@@ -63,6 +65,10 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primaryColor: Color.fromRGBO(3, 137, 146, 1),
+        primarySwatch: Colors.teal
+      ),
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is AuthenticationAuthenticated) {

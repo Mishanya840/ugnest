@@ -13,14 +13,16 @@ abstract class WelcomeLoginState implements LoginState, Built<WelcomeLoginState,
   factory WelcomeLoginState([void Function(WelcomeLoginStateBuilder) updates]) = _$WelcomeLoginState;
   static Serializer<WelcomeLoginState> get serializer => _$welcomeLoginStateSerializer;
 }
-abstract class PhoneNumberFormLoginState implements Built<PhoneNumberFormLoginState, PhoneNumberFormLoginStateBuilder> {
+abstract class PhoneNumberFormLoginState implements LoginState, Built<PhoneNumberFormLoginState, PhoneNumberFormLoginStateBuilder> {
+  String get phone;
+  bool get phoneIsFill;
 
   PhoneNumberFormLoginState._();
   factory PhoneNumberFormLoginState([void Function(PhoneNumberFormLoginStateBuilder) updates]) = _$PhoneNumberFormLoginState;
   static Serializer<PhoneNumberFormLoginState> get serializer => _$phoneNumberFormLoginStateSerializer;
 }
 
-abstract class LoginUserLoginState implements Built<LoginUserLoginState, LoginUserLoginStateBuilder> {
+abstract class LoginUserLoginState implements LoginState, Built<LoginUserLoginState, LoginUserLoginStateBuilder> {
   @nullable String get userName;
   bool get wrongPassword;
   String get phone;
@@ -32,7 +34,7 @@ abstract class LoginUserLoginState implements Built<LoginUserLoginState, LoginUs
 
 enum ConfirmRegistrationStatus {confirmCodeSent, wrongConfirmCode}
 
-abstract class RestorePasswordLoginState implements Built<RestorePasswordLoginState, RestorePasswordLoginStateBuilder> {
+abstract class RestorePasswordLoginState implements LoginState, Built<RestorePasswordLoginState, RestorePasswordLoginStateBuilder> {
   ConfirmRegistrationStatus get status;
   String get phone;
 
@@ -42,7 +44,7 @@ abstract class RestorePasswordLoginState implements Built<RestorePasswordLoginSt
 }
 
 
-abstract class ConfirmRegistrationLoginState implements Built<ConfirmRegistrationLoginState, ConfirmRegistrationLoginStateBuilder> {
+abstract class ConfirmRegistrationLoginState implements LoginState, Built<ConfirmRegistrationLoginState, ConfirmRegistrationLoginStateBuilder> {
   ConfirmRegistrationStatus get status;
   String get phone;
 

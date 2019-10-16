@@ -53,14 +53,42 @@ class _$PhoneNumberFormLoginStateSerializer
   Iterable<Object> serialize(
       Serializers serializers, PhoneNumberFormLoginState object,
       {FullType specifiedType = FullType.unspecified}) {
-    return <Object>[];
+    final result = <Object>[
+      'phone',
+      serializers.serialize(object.phone,
+          specifiedType: const FullType(String)),
+      'phoneIsFill',
+      serializers.serialize(object.phoneIsFill,
+          specifiedType: const FullType(bool)),
+    ];
+
+    return result;
   }
 
   @override
   PhoneNumberFormLoginState deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    return new PhoneNumberFormLoginStateBuilder().build();
+    final result = new PhoneNumberFormLoginStateBuilder();
+
+    final iterator = serialized.iterator;
+    while (iterator.moveNext()) {
+      final key = iterator.current as String;
+      iterator.moveNext();
+      final dynamic value = iterator.current;
+      switch (key) {
+        case 'phone':
+          result.phone = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String;
+          break;
+        case 'phoneIsFill':
+          result.phoneIsFill = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool;
+          break;
+      }
+    }
+
+    return result.build();
   }
 }
 
@@ -294,11 +322,24 @@ class WelcomeLoginStateBuilder
 }
 
 class _$PhoneNumberFormLoginState extends PhoneNumberFormLoginState {
+  @override
+  final String phone;
+  @override
+  final bool phoneIsFill;
+
   factory _$PhoneNumberFormLoginState(
           [void Function(PhoneNumberFormLoginStateBuilder) updates]) =>
       (new PhoneNumberFormLoginStateBuilder()..update(updates)).build();
 
-  _$PhoneNumberFormLoginState._() : super._();
+  _$PhoneNumberFormLoginState._({this.phone, this.phoneIsFill}) : super._() {
+    if (phone == null) {
+      throw new BuiltValueNullFieldError('PhoneNumberFormLoginState', 'phone');
+    }
+    if (phoneIsFill == null) {
+      throw new BuiltValueNullFieldError(
+          'PhoneNumberFormLoginState', 'phoneIsFill');
+    }
+  }
 
   @override
   PhoneNumberFormLoginState rebuild(
@@ -312,17 +353,22 @@ class _$PhoneNumberFormLoginState extends PhoneNumberFormLoginState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is PhoneNumberFormLoginState;
+    return other is PhoneNumberFormLoginState &&
+        phone == other.phone &&
+        phoneIsFill == other.phoneIsFill;
   }
 
   @override
   int get hashCode {
-    return 339934927;
+    return $jf($jc($jc(0, phone.hashCode), phoneIsFill.hashCode));
   }
 
   @override
   String toString() {
-    return newBuiltValueToStringHelper('PhoneNumberFormLoginState').toString();
+    return (newBuiltValueToStringHelper('PhoneNumberFormLoginState')
+          ..add('phone', phone)
+          ..add('phoneIsFill', phoneIsFill))
+        .toString();
   }
 }
 
@@ -331,7 +377,24 @@ class PhoneNumberFormLoginStateBuilder
         Builder<PhoneNumberFormLoginState, PhoneNumberFormLoginStateBuilder> {
   _$PhoneNumberFormLoginState _$v;
 
+  String _phone;
+  String get phone => _$this._phone;
+  set phone(String phone) => _$this._phone = phone;
+
+  bool _phoneIsFill;
+  bool get phoneIsFill => _$this._phoneIsFill;
+  set phoneIsFill(bool phoneIsFill) => _$this._phoneIsFill = phoneIsFill;
+
   PhoneNumberFormLoginStateBuilder();
+
+  PhoneNumberFormLoginStateBuilder get _$this {
+    if (_$v != null) {
+      _phone = _$v.phone;
+      _phoneIsFill = _$v.phoneIsFill;
+      _$v = null;
+    }
+    return this;
+  }
 
   @override
   void replace(PhoneNumberFormLoginState other) {
@@ -348,7 +411,9 @@ class PhoneNumberFormLoginStateBuilder
 
   @override
   _$PhoneNumberFormLoginState build() {
-    final _$result = _$v ?? new _$PhoneNumberFormLoginState._();
+    final _$result = _$v ??
+        new _$PhoneNumberFormLoginState._(
+            phone: phone, phoneIsFill: phoneIsFill);
     replace(_$result);
     return _$result;
   }
