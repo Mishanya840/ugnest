@@ -8,15 +8,15 @@ part of 'login_state.dart';
 
 Serializer<WelcomeLoginState> _$welcomeLoginStateSerializer =
     new _$WelcomeLoginStateSerializer();
-Serializer<PhoneNumberFormLoginState> _$phoneNumberFormLoginStateSerializer =
-    new _$PhoneNumberFormLoginStateSerializer();
+Serializer<CheckRegistrationLoginState>
+    _$checkRegistrationLoginStateSerializer =
+    new _$CheckRegistrationLoginStateSerializer();
 Serializer<LoginUserLoginState> _$loginUserLoginStateSerializer =
     new _$LoginUserLoginStateSerializer();
 Serializer<RestorePasswordLoginState> _$restorePasswordLoginStateSerializer =
     new _$RestorePasswordLoginStateSerializer();
-Serializer<ConfirmRegistrationLoginState>
-    _$confirmRegistrationLoginStateSerializer =
-    new _$ConfirmRegistrationLoginStateSerializer();
+Serializer<RegistrationLoginState> _$registrationLoginStateSerializer =
+    new _$RegistrationLoginStateSerializer();
 
 class _$WelcomeLoginStateSerializer
     implements StructuredSerializer<WelcomeLoginState> {
@@ -39,56 +39,28 @@ class _$WelcomeLoginStateSerializer
   }
 }
 
-class _$PhoneNumberFormLoginStateSerializer
-    implements StructuredSerializer<PhoneNumberFormLoginState> {
+class _$CheckRegistrationLoginStateSerializer
+    implements StructuredSerializer<CheckRegistrationLoginState> {
   @override
   final Iterable<Type> types = const [
-    PhoneNumberFormLoginState,
-    _$PhoneNumberFormLoginState
+    CheckRegistrationLoginState,
+    _$CheckRegistrationLoginState
   ];
   @override
-  final String wireName = 'PhoneNumberFormLoginState';
+  final String wireName = 'CheckRegistrationLoginState';
 
   @override
   Iterable<Object> serialize(
-      Serializers serializers, PhoneNumberFormLoginState object,
+      Serializers serializers, CheckRegistrationLoginState object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'phone',
-      serializers.serialize(object.phone,
-          specifiedType: const FullType(String)),
-      'phoneIsFill',
-      serializers.serialize(object.phoneIsFill,
-          specifiedType: const FullType(bool)),
-    ];
-
-    return result;
+    return <Object>[];
   }
 
   @override
-  PhoneNumberFormLoginState deserialize(
+  CheckRegistrationLoginState deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new PhoneNumberFormLoginStateBuilder();
-
-    final iterator = serialized.iterator;
-    while (iterator.moveNext()) {
-      final key = iterator.current as String;
-      iterator.moveNext();
-      final dynamic value = iterator.current;
-      switch (key) {
-        case 'phone':
-          result.phone = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'phoneIsFill':
-          result.phoneIsFill = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
-          break;
-      }
-    }
-
-    return result.build();
+    return new CheckRegistrationLoginStateBuilder().build();
   }
 }
 
@@ -106,51 +78,14 @@ class _$LoginUserLoginStateSerializer
   Iterable<Object> serialize(
       Serializers serializers, LoginUserLoginState object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'wrongPassword',
-      serializers.serialize(object.wrongPassword,
-          specifiedType: const FullType(bool)),
-      'phone',
-      serializers.serialize(object.phone,
-          specifiedType: const FullType(String)),
-    ];
-    if (object.userName != null) {
-      result
-        ..add('userName')
-        ..add(serializers.serialize(object.userName,
-            specifiedType: const FullType(String)));
-    }
-    return result;
+    return <Object>[];
   }
 
   @override
   LoginUserLoginState deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new LoginUserLoginStateBuilder();
-
-    final iterator = serialized.iterator;
-    while (iterator.moveNext()) {
-      final key = iterator.current as String;
-      iterator.moveNext();
-      final dynamic value = iterator.current;
-      switch (key) {
-        case 'userName':
-          result.userName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-        case 'wrongPassword':
-          result.wrongPassword = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool;
-          break;
-        case 'phone':
-          result.phone = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
-          break;
-      }
-    }
-
-    return result.build();
+    return new LoginUserLoginStateBuilder().build();
   }
 }
 
@@ -168,15 +103,13 @@ class _$RestorePasswordLoginStateSerializer
   Iterable<Object> serialize(
       Serializers serializers, RestorePasswordLoginState object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'status',
-      serializers.serialize(object.status,
-          specifiedType: const FullType(ConfirmRegistrationStatus)),
-      'phone',
-      serializers.serialize(object.phone,
-          specifiedType: const FullType(String)),
-    ];
-
+    final result = <Object>[];
+    if (object.status != null) {
+      result
+        ..add('status')
+        ..add(serializers.serialize(object.status,
+            specifiedType: const FullType(ConfirmCodeStatus)));
+    }
     return result;
   }
 
@@ -194,12 +127,8 @@ class _$RestorePasswordLoginStateSerializer
       switch (key) {
         case 'status':
           result.status = serializers.deserialize(value,
-                  specifiedType: const FullType(ConfirmRegistrationStatus))
-              as ConfirmRegistrationStatus;
-          break;
-        case 'phone':
-          result.phone = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+                  specifiedType: const FullType(ConfirmCodeStatus))
+              as ConfirmCodeStatus;
           break;
       }
     }
@@ -208,37 +137,35 @@ class _$RestorePasswordLoginStateSerializer
   }
 }
 
-class _$ConfirmRegistrationLoginStateSerializer
-    implements StructuredSerializer<ConfirmRegistrationLoginState> {
+class _$RegistrationLoginStateSerializer
+    implements StructuredSerializer<RegistrationLoginState> {
   @override
   final Iterable<Type> types = const [
-    ConfirmRegistrationLoginState,
-    _$ConfirmRegistrationLoginState
+    RegistrationLoginState,
+    _$RegistrationLoginState
   ];
   @override
-  final String wireName = 'ConfirmRegistrationLoginState';
+  final String wireName = 'RegistrationLoginState';
 
   @override
   Iterable<Object> serialize(
-      Serializers serializers, ConfirmRegistrationLoginState object,
+      Serializers serializers, RegistrationLoginState object,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = <Object>[
-      'status',
-      serializers.serialize(object.status,
-          specifiedType: const FullType(ConfirmRegistrationStatus)),
-      'phone',
-      serializers.serialize(object.phone,
-          specifiedType: const FullType(String)),
-    ];
-
+    final result = <Object>[];
+    if (object.status != null) {
+      result
+        ..add('status')
+        ..add(serializers.serialize(object.status,
+            specifiedType: const FullType(ConfirmCodeStatus)));
+    }
     return result;
   }
 
   @override
-  ConfirmRegistrationLoginState deserialize(
+  RegistrationLoginState deserialize(
       Serializers serializers, Iterable<Object> serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    final result = new ConfirmRegistrationLoginStateBuilder();
+    final result = new RegistrationLoginStateBuilder();
 
     final iterator = serialized.iterator;
     while (iterator.moveNext()) {
@@ -248,12 +175,8 @@ class _$ConfirmRegistrationLoginStateSerializer
       switch (key) {
         case 'status':
           result.status = serializers.deserialize(value,
-                  specifiedType: const FullType(ConfirmRegistrationStatus))
-              as ConfirmRegistrationStatus;
-          break;
-        case 'phone':
-          result.phone = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String;
+                  specifiedType: const FullType(ConfirmCodeStatus))
+              as ConfirmCodeStatus;
           break;
       }
     }
@@ -321,126 +244,75 @@ class WelcomeLoginStateBuilder
   }
 }
 
-class _$PhoneNumberFormLoginState extends PhoneNumberFormLoginState {
-  @override
-  final String phone;
-  @override
-  final bool phoneIsFill;
+class _$CheckRegistrationLoginState extends CheckRegistrationLoginState {
+  factory _$CheckRegistrationLoginState(
+          [void Function(CheckRegistrationLoginStateBuilder) updates]) =>
+      (new CheckRegistrationLoginStateBuilder()..update(updates)).build();
 
-  factory _$PhoneNumberFormLoginState(
-          [void Function(PhoneNumberFormLoginStateBuilder) updates]) =>
-      (new PhoneNumberFormLoginStateBuilder()..update(updates)).build();
-
-  _$PhoneNumberFormLoginState._({this.phone, this.phoneIsFill}) : super._() {
-    if (phone == null) {
-      throw new BuiltValueNullFieldError('PhoneNumberFormLoginState', 'phone');
-    }
-    if (phoneIsFill == null) {
-      throw new BuiltValueNullFieldError(
-          'PhoneNumberFormLoginState', 'phoneIsFill');
-    }
-  }
+  _$CheckRegistrationLoginState._() : super._();
 
   @override
-  PhoneNumberFormLoginState rebuild(
-          void Function(PhoneNumberFormLoginStateBuilder) updates) =>
+  CheckRegistrationLoginState rebuild(
+          void Function(CheckRegistrationLoginStateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  PhoneNumberFormLoginStateBuilder toBuilder() =>
-      new PhoneNumberFormLoginStateBuilder()..replace(this);
+  CheckRegistrationLoginStateBuilder toBuilder() =>
+      new CheckRegistrationLoginStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is PhoneNumberFormLoginState &&
-        phone == other.phone &&
-        phoneIsFill == other.phoneIsFill;
+    return other is CheckRegistrationLoginState;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, phone.hashCode), phoneIsFill.hashCode));
+    return 601433749;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('PhoneNumberFormLoginState')
-          ..add('phone', phone)
-          ..add('phoneIsFill', phoneIsFill))
+    return newBuiltValueToStringHelper('CheckRegistrationLoginState')
         .toString();
   }
 }
 
-class PhoneNumberFormLoginStateBuilder
+class CheckRegistrationLoginStateBuilder
     implements
-        Builder<PhoneNumberFormLoginState, PhoneNumberFormLoginStateBuilder> {
-  _$PhoneNumberFormLoginState _$v;
+        Builder<CheckRegistrationLoginState,
+            CheckRegistrationLoginStateBuilder> {
+  _$CheckRegistrationLoginState _$v;
 
-  String _phone;
-  String get phone => _$this._phone;
-  set phone(String phone) => _$this._phone = phone;
-
-  bool _phoneIsFill;
-  bool get phoneIsFill => _$this._phoneIsFill;
-  set phoneIsFill(bool phoneIsFill) => _$this._phoneIsFill = phoneIsFill;
-
-  PhoneNumberFormLoginStateBuilder();
-
-  PhoneNumberFormLoginStateBuilder get _$this {
-    if (_$v != null) {
-      _phone = _$v.phone;
-      _phoneIsFill = _$v.phoneIsFill;
-      _$v = null;
-    }
-    return this;
-  }
+  CheckRegistrationLoginStateBuilder();
 
   @override
-  void replace(PhoneNumberFormLoginState other) {
+  void replace(CheckRegistrationLoginState other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$PhoneNumberFormLoginState;
+    _$v = other as _$CheckRegistrationLoginState;
   }
 
   @override
-  void update(void Function(PhoneNumberFormLoginStateBuilder) updates) {
+  void update(void Function(CheckRegistrationLoginStateBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$PhoneNumberFormLoginState build() {
-    final _$result = _$v ??
-        new _$PhoneNumberFormLoginState._(
-            phone: phone, phoneIsFill: phoneIsFill);
+  _$CheckRegistrationLoginState build() {
+    final _$result = _$v ?? new _$CheckRegistrationLoginState._();
     replace(_$result);
     return _$result;
   }
 }
 
 class _$LoginUserLoginState extends LoginUserLoginState {
-  @override
-  final String userName;
-  @override
-  final bool wrongPassword;
-  @override
-  final String phone;
-
   factory _$LoginUserLoginState(
           [void Function(LoginUserLoginStateBuilder) updates]) =>
       (new LoginUserLoginStateBuilder()..update(updates)).build();
 
-  _$LoginUserLoginState._({this.userName, this.wrongPassword, this.phone})
-      : super._() {
-    if (wrongPassword == null) {
-      throw new BuiltValueNullFieldError(
-          'LoginUserLoginState', 'wrongPassword');
-    }
-    if (phone == null) {
-      throw new BuiltValueNullFieldError('LoginUserLoginState', 'phone');
-    }
-  }
+  _$LoginUserLoginState._() : super._();
 
   @override
   LoginUserLoginState rebuild(
@@ -454,25 +326,17 @@ class _$LoginUserLoginState extends LoginUserLoginState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is LoginUserLoginState &&
-        userName == other.userName &&
-        wrongPassword == other.wrongPassword &&
-        phone == other.phone;
+    return other is LoginUserLoginState;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc($jc(0, userName.hashCode), wrongPassword.hashCode),
-        phone.hashCode));
+    return 397997923;
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LoginUserLoginState')
-          ..add('userName', userName)
-          ..add('wrongPassword', wrongPassword)
-          ..add('phone', phone))
-        .toString();
+    return newBuiltValueToStringHelper('LoginUserLoginState').toString();
   }
 }
 
@@ -480,30 +344,7 @@ class LoginUserLoginStateBuilder
     implements Builder<LoginUserLoginState, LoginUserLoginStateBuilder> {
   _$LoginUserLoginState _$v;
 
-  String _userName;
-  String get userName => _$this._userName;
-  set userName(String userName) => _$this._userName = userName;
-
-  bool _wrongPassword;
-  bool get wrongPassword => _$this._wrongPassword;
-  set wrongPassword(bool wrongPassword) =>
-      _$this._wrongPassword = wrongPassword;
-
-  String _phone;
-  String get phone => _$this._phone;
-  set phone(String phone) => _$this._phone = phone;
-
   LoginUserLoginStateBuilder();
-
-  LoginUserLoginStateBuilder get _$this {
-    if (_$v != null) {
-      _userName = _$v.userName;
-      _wrongPassword = _$v.wrongPassword;
-      _phone = _$v.phone;
-      _$v = null;
-    }
-    return this;
-  }
 
   @override
   void replace(LoginUserLoginState other) {
@@ -520,9 +361,7 @@ class LoginUserLoginStateBuilder
 
   @override
   _$LoginUserLoginState build() {
-    final _$result = _$v ??
-        new _$LoginUserLoginState._(
-            userName: userName, wrongPassword: wrongPassword, phone: phone);
+    final _$result = _$v ?? new _$LoginUserLoginState._();
     replace(_$result);
     return _$result;
   }
@@ -530,22 +369,13 @@ class LoginUserLoginStateBuilder
 
 class _$RestorePasswordLoginState extends RestorePasswordLoginState {
   @override
-  final ConfirmRegistrationStatus status;
-  @override
-  final String phone;
+  final ConfirmCodeStatus status;
 
   factory _$RestorePasswordLoginState(
           [void Function(RestorePasswordLoginStateBuilder) updates]) =>
       (new RestorePasswordLoginStateBuilder()..update(updates)).build();
 
-  _$RestorePasswordLoginState._({this.status, this.phone}) : super._() {
-    if (status == null) {
-      throw new BuiltValueNullFieldError('RestorePasswordLoginState', 'status');
-    }
-    if (phone == null) {
-      throw new BuiltValueNullFieldError('RestorePasswordLoginState', 'phone');
-    }
-  }
+  _$RestorePasswordLoginState._({this.status}) : super._();
 
   @override
   RestorePasswordLoginState rebuild(
@@ -559,21 +389,18 @@ class _$RestorePasswordLoginState extends RestorePasswordLoginState {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is RestorePasswordLoginState &&
-        status == other.status &&
-        phone == other.phone;
+    return other is RestorePasswordLoginState && status == other.status;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, status.hashCode), phone.hashCode));
+    return $jf($jc(0, status.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper('RestorePasswordLoginState')
-          ..add('status', status)
-          ..add('phone', phone))
+          ..add('status', status))
         .toString();
   }
 }
@@ -583,20 +410,15 @@ class RestorePasswordLoginStateBuilder
         Builder<RestorePasswordLoginState, RestorePasswordLoginStateBuilder> {
   _$RestorePasswordLoginState _$v;
 
-  ConfirmRegistrationStatus _status;
-  ConfirmRegistrationStatus get status => _$this._status;
-  set status(ConfirmRegistrationStatus status) => _$this._status = status;
-
-  String _phone;
-  String get phone => _$this._phone;
-  set phone(String phone) => _$this._phone = phone;
+  ConfirmCodeStatus _status;
+  ConfirmCodeStatus get status => _$this._status;
+  set status(ConfirmCodeStatus status) => _$this._status = status;
 
   RestorePasswordLoginStateBuilder();
 
   RestorePasswordLoginStateBuilder get _$this {
     if (_$v != null) {
       _status = _$v.status;
-      _phone = _$v.phone;
       _$v = null;
     }
     return this;
@@ -617,107 +439,84 @@ class RestorePasswordLoginStateBuilder
 
   @override
   _$RestorePasswordLoginState build() {
-    final _$result =
-        _$v ?? new _$RestorePasswordLoginState._(status: status, phone: phone);
+    final _$result = _$v ?? new _$RestorePasswordLoginState._(status: status);
     replace(_$result);
     return _$result;
   }
 }
 
-class _$ConfirmRegistrationLoginState extends ConfirmRegistrationLoginState {
+class _$RegistrationLoginState extends RegistrationLoginState {
   @override
-  final ConfirmRegistrationStatus status;
-  @override
-  final String phone;
+  final ConfirmCodeStatus status;
 
-  factory _$ConfirmRegistrationLoginState(
-          [void Function(ConfirmRegistrationLoginStateBuilder) updates]) =>
-      (new ConfirmRegistrationLoginStateBuilder()..update(updates)).build();
+  factory _$RegistrationLoginState(
+          [void Function(RegistrationLoginStateBuilder) updates]) =>
+      (new RegistrationLoginStateBuilder()..update(updates)).build();
 
-  _$ConfirmRegistrationLoginState._({this.status, this.phone}) : super._() {
-    if (status == null) {
-      throw new BuiltValueNullFieldError(
-          'ConfirmRegistrationLoginState', 'status');
-    }
-    if (phone == null) {
-      throw new BuiltValueNullFieldError(
-          'ConfirmRegistrationLoginState', 'phone');
-    }
-  }
+  _$RegistrationLoginState._({this.status}) : super._();
 
   @override
-  ConfirmRegistrationLoginState rebuild(
-          void Function(ConfirmRegistrationLoginStateBuilder) updates) =>
+  RegistrationLoginState rebuild(
+          void Function(RegistrationLoginStateBuilder) updates) =>
       (toBuilder()..update(updates)).build();
 
   @override
-  ConfirmRegistrationLoginStateBuilder toBuilder() =>
-      new ConfirmRegistrationLoginStateBuilder()..replace(this);
+  RegistrationLoginStateBuilder toBuilder() =>
+      new RegistrationLoginStateBuilder()..replace(this);
 
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is ConfirmRegistrationLoginState &&
-        status == other.status &&
-        phone == other.phone;
+    return other is RegistrationLoginState && status == other.status;
   }
 
   @override
   int get hashCode {
-    return $jf($jc($jc(0, status.hashCode), phone.hashCode));
+    return $jf($jc(0, status.hashCode));
   }
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('ConfirmRegistrationLoginState')
-          ..add('status', status)
-          ..add('phone', phone))
+    return (newBuiltValueToStringHelper('RegistrationLoginState')
+          ..add('status', status))
         .toString();
   }
 }
 
-class ConfirmRegistrationLoginStateBuilder
-    implements
-        Builder<ConfirmRegistrationLoginState,
-            ConfirmRegistrationLoginStateBuilder> {
-  _$ConfirmRegistrationLoginState _$v;
+class RegistrationLoginStateBuilder
+    implements Builder<RegistrationLoginState, RegistrationLoginStateBuilder> {
+  _$RegistrationLoginState _$v;
 
-  ConfirmRegistrationStatus _status;
-  ConfirmRegistrationStatus get status => _$this._status;
-  set status(ConfirmRegistrationStatus status) => _$this._status = status;
+  ConfirmCodeStatus _status;
+  ConfirmCodeStatus get status => _$this._status;
+  set status(ConfirmCodeStatus status) => _$this._status = status;
 
-  String _phone;
-  String get phone => _$this._phone;
-  set phone(String phone) => _$this._phone = phone;
+  RegistrationLoginStateBuilder();
 
-  ConfirmRegistrationLoginStateBuilder();
-
-  ConfirmRegistrationLoginStateBuilder get _$this {
+  RegistrationLoginStateBuilder get _$this {
     if (_$v != null) {
       _status = _$v.status;
-      _phone = _$v.phone;
       _$v = null;
     }
     return this;
   }
 
   @override
-  void replace(ConfirmRegistrationLoginState other) {
+  void replace(RegistrationLoginState other) {
     if (other == null) {
       throw new ArgumentError.notNull('other');
     }
-    _$v = other as _$ConfirmRegistrationLoginState;
+    _$v = other as _$RegistrationLoginState;
   }
 
   @override
-  void update(void Function(ConfirmRegistrationLoginStateBuilder) updates) {
+  void update(void Function(RegistrationLoginStateBuilder) updates) {
     if (updates != null) updates(this);
   }
 
   @override
-  _$ConfirmRegistrationLoginState build() {
-    final _$result = _$v ??
-        new _$ConfirmRegistrationLoginState._(status: status, phone: phone);
+  _$RegistrationLoginState build() {
+    final _$result = _$v ?? new _$RegistrationLoginState._(status: status);
     replace(_$result);
     return _$result;
   }

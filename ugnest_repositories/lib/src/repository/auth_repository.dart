@@ -39,12 +39,12 @@ class AuthRepository with Loggable {
     }).then((returned) => ServerProxyUtil.checkError(returned));
   }
 
-  Future<String> login({
-    @required String phone,
+  Future<Map<String, dynamic>> login({
+    @required String login,
     @required String password,
   }) {
     return _proxy.call('auth.Login', {
-      "phone": phone,
+      "phone": login,
       "password": password
     }).then((returned) => ServerProxyUtil.checkError(returned));
   }
@@ -59,14 +59,14 @@ class AuthRepository with Loggable {
     }).then((returned) => ServerProxyUtil.checkError(returned));
   }
 
-  Future<String> reg({
-    @required String phone,
+  Future<Map<String, dynamic>> reg({
+    @required String login,
     @required String password,
     String sessionId,
     String code,
   }) {
     return _proxy.call('auth.Reg',{
-      "phone": phone,
+      "phone": login,
       "password": password,
       "sessionId": sessionId,
       "code": code

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:ugnest/login/login.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,9 +11,8 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final _phoneController = TextEditingController();
+  final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _maskTextInputFormatter = MaskTextInputFormatter(mask: '+7 (###) ###-##-##', filter: { "#": RegExp(r'[0-9]') });
 
 
   @override
@@ -48,28 +46,50 @@ class _LoginFormState extends State<LoginForm> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: TextFormField(
-                            onTap: state is WelcomeLoginState ? () => BlocProvider.of<LoginBloc>(context).dispatch(SelectedLoginByNumber()) : null,
-                            keyboardType: TextInputType.phone,
-                            inputFormatters: [
-                              _maskTextInputFormatter
-                            ],
+                            controller: _loginController,
+                            keyboardType: TextInputType.emailAddress,
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                BlocProvider.of<LoginBloc>(context).dispatch(SelectedLoginByNumber());
+                              } else {
+                                BlocProvider.of<LoginBloc>(context).dispatch(BackToWelcome());
+                              }
+                            },
                             decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
                                 border: OutlineInputBorder(
                                     borderRadius: const BorderRadius.all(Radius.circular(24)),
                                 ),
-                                hintText: 'Введите номер телефона'
+                                hintText: 'Введите email'
                             ),
-                            controller: _phoneController,
                           ),
                         ),
+
+                        if (state is RegistrationLoginState || state is LoginUserLoginState)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            child: TextFormField(
+                              controller: _passwordController,
+                              keyboardType: TextInputType.visiblePassword,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+                                  border: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(Radius.circular(24)),
+                                  ),
+                                  hintText: 'Введите пароль'
+                              ),
+                            ),
+                          ),
                       // FIXME: 2
-                      if (state is PhoneNumberFormLoginState)
-                        _buildButton(context, onPressed: state.phoneIsFill
-                          ? () => BlocProvider.of<LoginBloc>(context)
-                            .dispatch(CheckNumber(_maskTextInputFormatter.getUnmaskedText()))
-                          : null
-                        ),
+                        if (state is CheckRegistrationLoginState)
+                          _buildButton(context, 'Продолжить', onPressed: () => BlocProvider.of<LoginBloc>(context).dispatch(CheckLogin(_loginController.text))),
+
+                        if (state is LoginUserLoginState)
+                          _buildButton(context, 'Войти', onPressed: () => BlocProvider.of<LoginBloc>(context).dispatch(LoginButtonPressed(_loginController.text, _passwordController.text))),
+
+                        if (state is RegistrationLoginState)
+                          _buildButton(context, 'Зарегистрироваться', onPressed: () => BlocProvider.of<LoginBloc>(context).dispatch(RegisterButtonPressed(_loginController.text, _passwordController.text))),
+
                       ],
                     ),
                   ),
@@ -135,20 +155,20 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   String _getHeadlineText(LoginState state) {
-      if (state is WelcomeLoginState || state is SelectedLoginByNumber) {
+      if (state is WelcomeLoginState || state is CheckRegistrationLoginState) {
         return 'Добро пожаловсть\nв Уютное гнездышко!';
       } else if (state is LoginUserLoginState) {
-        return 'Добрый день,\n${(state as LoginUserLoginState).userName}';
+        return 'Добрый день!';
+      } else if (state is RegistrationLoginState) {
+        return 'Благодарим вас\nза регистрацию!';
       } else if (state is RestorePasswordLoginState) {
-        return 'Если забыли пароль, то\nего можго восстановить';
-      } else if (state is ConfirmRegistrationLoginState) {
         return 'Проверьте свои СМС,\nмы отправили код';
       } else {
-        return '';
+        return '-';
       }
   }
 
-  SizedBox _buildButton(BuildContext context, {VoidCallback onPressed}) {
+  SizedBox _buildButton(BuildContext context, String text, {VoidCallback onPressed}) {
     return SizedBox.fromSize(
                     size: Size.fromHeight(40),
                     child: RaisedButton(
@@ -161,7 +181,7 @@ class _LoginFormState extends State<LoginForm> {
                         borderRadius: const BorderRadius.all(Radius.circular(100)),
                       ),
                       onPressed: onPressed,
-                      child: Text('Продолжить'),
+                      child: Text(text),
                     ),
                   );
   }

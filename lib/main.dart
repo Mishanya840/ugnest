@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loggable/loggable.dart';
 import 'package:provider/provider.dart';
+import 'package:ugnest/user_notification/user_notification_bloc.dart';
 import 'package:ugnest_repositories/ugnest_repositories.dart';
 
 import 'package:ugnest/authentication/authentication.dart';
@@ -56,7 +57,6 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  static const _primarySwatchValue = 0x038992;
 
   final AuthRepository authRepository;
 
@@ -64,24 +64,27 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        primaryColor: Color.fromRGBO(3, 137, 146, 1),
-        primarySwatch: Colors.teal
-      ),
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          if (state is AuthenticationAuthenticated) {
-            return HomePage();
-          }
-          if (state is AuthenticationUnauthenticated) {
-            return LoginPage(authRepository: authRepository);
-          }
-          if (state is AuthenticationLoading) {
-            return LoadingIndicator();
-          }
-          return SplashPage();
-        },
+    return BlocProvider(
+      builder: (_) => UserNotificationBloc(),
+      child: MaterialApp(
+        theme: ThemeData(
+          primaryColor: Color.fromRGBO(3, 137, 146, 1),
+          primarySwatch: Colors.teal
+        ),
+        home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          builder: (context, state) {
+            if (state is AuthenticationAuthenticated) {
+              return HomePage();
+            }
+            if (state is AuthenticationUnauthenticated) {
+              return LoginPage(authRepository: authRepository);
+            }
+            if (state is AuthenticationLoading) {
+              return LoadingIndicator();
+            }
+            return SplashPage();
+          },
+        ),
       ),
     );
   }
