@@ -35,7 +35,7 @@ packages:
       name: bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.0"
+    version: "0.16.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -194,7 +194,7 @@ packages:
       name: flutter_bloc
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.21.0"
+    version: "0.22.1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -432,12 +432,12 @@ packages:
     source: hosted
     version: "0.22.3"
   shared_preferences:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.3+4"
+    version: "0.5.3+5"
   shelf:
     dependency: transitive
     description:

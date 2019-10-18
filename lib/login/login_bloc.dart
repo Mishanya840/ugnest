@@ -101,13 +101,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Loggable {
   }
 
   Stream<LoginState> _handleBackToWelcome(BackToWelcome event) async* {
-    if (currentState is CheckRegistrationLoginState) {
+    if (state is CheckRegistrationLoginState) {
       yield WelcomeLoginState();
     }
   }
 
   Stream<LoginState> _handleSelectedLoginByNumber(SelectedLoginByNumber event) async* {
-    if (currentState is WelcomeLoginState) {
+    if (state is WelcomeLoginState) {
       yield CheckRegistrationLoginState();
     }
   }

@@ -4,7 +4,7 @@ import './bloc.dart';
 
 class UserNotificationBloc extends Bloc<UserNotificationEvent, UserNotificationState> {
   @override
-  UserNotificationState get initialState => UserNotificationState();
+  UserNotificationState get initialState => UserNotificationState(null);
 
   @override
   Stream<UserNotificationState> mapEventToState(
@@ -26,6 +26,6 @@ class UserNotificationBloc extends Bloc<UserNotificationEvent, UserNotificationS
     } else {
       message = 'Ошибка: ${event.message}';
     }
-    yield UserNotificationState((b) => b..message = message);
+    yield UserNotificationState(message);
   }
 }
