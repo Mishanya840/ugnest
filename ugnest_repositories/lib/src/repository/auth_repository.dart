@@ -94,10 +94,9 @@ class AuthRepository with Loggable {
 
 
 
-  Future<void> persistToken(String token) async {
+  Future<void> persistToken(String token) {
     /// write to keystore/keychain
-    BasePreferences.setAuthToken(token);
-    return;
+    return BasePreferences.setAuthToken(token);
   }
 
   Future<bool> hasToken() async {

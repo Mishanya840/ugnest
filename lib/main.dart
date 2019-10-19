@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loggable/loggable.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +35,11 @@ class SimpleBlocDelegate extends BlocDelegate with Loggable {
   }
 }
 
-void main() {
+void main() async {
+  await  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   BlocSupervisor.delegate = SimpleBlocDelegate();
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {
@@ -48,7 +53,7 @@ void main() {
       child: BlocProvider<AuthenticationBloc>(
         builder: (context) {
           return AuthenticationBloc(authRepository: ugnestRepository.authRepository)
-            ..dispatch(AppStarted());
+            ..add(AppStarted());
         },
         child: App(authRepository: ugnestRepository.authRepository),
       ),

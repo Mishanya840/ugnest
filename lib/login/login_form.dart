@@ -14,7 +14,6 @@ class _LoginFormState extends State<LoginForm> {
   final _loginController = TextEditingController();
   final _passwordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -50,9 +49,9 @@ class _LoginFormState extends State<LoginForm> {
                             keyboardType: TextInputType.emailAddress,
                             onChanged: (value) {
                               if (value.isNotEmpty) {
-                                BlocProvider.of<LoginBloc>(context).dispatch(SelectedLoginByNumber());
+                                BlocProvider.of<LoginBloc>(context).add(SelectedLoginByNumber());
                               } else {
-                                BlocProvider.of<LoginBloc>(context).dispatch(BackToWelcome());
+                                BlocProvider.of<LoginBloc>(context).add(BackToWelcome());
                               }
                             },
                             decoration: InputDecoration(
@@ -71,6 +70,7 @@ class _LoginFormState extends State<LoginForm> {
                             child: TextFormField(
                               controller: _passwordController,
                               keyboardType: TextInputType.visiblePassword,
+                              obscureText: true,
                               decoration: InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
                                   border: OutlineInputBorder(
@@ -80,20 +80,20 @@ class _LoginFormState extends State<LoginForm> {
                               ),
                             ),
                           ),
-                      // FIXME: 2
+
                         if (state is CheckRegistrationLoginState)
-                          _buildButton(context, 'Продолжить', onPressed: () => BlocProvider.of<LoginBloc>(context).dispatch(CheckLogin(_loginController.text))),
+                          _buildButton(context, 'Продолжить', onPressed: () => BlocProvider.of<LoginBloc>(context).add(CheckLogin(_loginController.text))),
 
                         if (state is LoginUserLoginState)
-                          _buildButton(context, 'Войти', onPressed: () => BlocProvider.of<LoginBloc>(context).dispatch(LoginButtonPressed(_loginController.text, _passwordController.text))),
+                          _buildButton(context, 'Войти', onPressed: () => BlocProvider.of<LoginBloc>(context).add(LoginButtonPressed(_loginController.text, _passwordController.text))),
 
                         if (state is RegistrationLoginState)
-                          _buildButton(context, 'Зарегистрироваться', onPressed: () => BlocProvider.of<LoginBloc>(context).dispatch(RegisterButtonPressed(_loginController.text, _passwordController.text))),
+                          _buildButton(context, 'Зарегистрироваться', onPressed: () => BlocProvider.of<LoginBloc>(context).add(RegisterButtonPressed(_loginController.text, _passwordController.text))),
 
                       ],
                     ),
                   ),
-                  // FIXME: 1
+
                   if (state is WelcomeLoginState)
                     _buildLoginViaSocialNetwork(context),
 
@@ -104,19 +104,19 @@ class _LoginFormState extends State<LoginForm> {
                           children: [
                             TextSpan(
                               text: 'Авторизуясь в приложении, вы принимаете\nусловия ',
-                              style: new TextStyle(color: Colors.black),
+                              style: TextStyle(color: Colors.black),
                             ),
                             TextSpan(
                               text: 'пользовательского соглашения',
-                              style: new TextStyle(color: Theme.of(context).accentColor),
-                              recognizer: new TapGestureRecognizer()
+                              style: TextStyle(color: Theme.of(context).accentColor),
+                              recognizer: TapGestureRecognizer()
                                 ..onTap = () {
 
                                 },
                             ),
                             TextSpan(
                               text: ', и даете\nсогласие на обработку персональных дынных\nв соответсвии с законодательством',
-                              style: new TextStyle(color: Colors.black),
+                              style: TextStyle(color: Colors.black),
                             ),
                           ],
                         )),
@@ -144,11 +144,11 @@ class _LoginFormState extends State<LoginForm> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                    CircleButton(onTap: () {}, iconData: Icons.exposure_plus_1),
-                    CircleButton(onTap: () {}, iconData: Icons.exposure_plus_1),
-                    CircleButton(onTap: () {}, iconData: Icons.exposure_plus_1),
-                    CircleButton(onTap: () {}, iconData: Icons.exposure_plus_1),
-                    CircleButton(onTap: () {}, iconData: Icons.exposure_plus_1),
+                    CircleButton(onTap: () {}, iconData: Icons.image),
+                    CircleButton(onTap: () {}, iconData: Icons.image),
+                    CircleButton(onTap: () {}, iconData: Icons.image),
+                    CircleButton(onTap: () {}, iconData: Icons.image),
+                    CircleButton(onTap: () {}, iconData: Icons.image),
                   ],),
                 ],
               );
@@ -203,16 +203,16 @@ class CircleButton extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(6.0),
-      child: new InkResponse(
+      child: InkResponse(
         onTap: onTap ?? () {},
-        child: new Container(
+        child: Container(
           width: size,
           height: size,
-          decoration: new BoxDecoration(
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: Colors.amber.shade400
           ),
-          child: new Icon(
+          child: Icon(
             iconData,
             color: Colors.black,
           ),

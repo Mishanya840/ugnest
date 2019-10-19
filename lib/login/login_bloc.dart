@@ -48,10 +48,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Loggable {
       );
       log.finer('Login: $result');
 
-      authenticationBloc.dispatch(LoggedIn(token: result['token']));
+      authenticationBloc.add(LoggedIn(token: result['token']));
     } on RemoteException catch (error) {
       log.warning('Login error: $error');
-      userNotificationBloc.dispatch(HttpError(error.code, error.message));
+      userNotificationBloc.add(HttpError(error.code, error.message));
     } catch (error) {
       log.warning('Login error: $error');
     }
@@ -65,10 +65,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Loggable {
       );
       log.finer('Register: $result');
 
-      authenticationBloc.dispatch(LoggedIn(token: result['token']));
+      authenticationBloc.add(LoggedIn(token: result['token']));
     } on RemoteException catch (error) {
       log.warning('Register error: $error');
-      userNotificationBloc.dispatch(HttpError(error.code, error.message));
+      userNotificationBloc.add(HttpError(error.code, error.message));
     } catch (error) {
       log.warning('Register error: $error');
     }
@@ -83,7 +83,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Loggable {
         );
       } on RemoteException catch (error) {
         log.warning('checkLogin error: $error');
-//        userNotificationBloc.dispatch(HttpError(error.code, error.message));
+//        userNotificationBloc.add(HttpError(error.code, error.message));
         checkLogin = false;
       } catch (error) {
         log.warning('checkLogin error: $error');

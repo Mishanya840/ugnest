@@ -10,3 +10,4 @@ dependencies:
   jsonrpc2: ^2.0.3+1
   loggable: ^1.0.1
   shared_preferences: ^0.5.3+5
+  pedantic: ^1.8.0+1
