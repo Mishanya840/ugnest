@@ -12,8 +12,8 @@ class  UgnestRepository {
 
   AuthRepository _authRepository;
 
-  UgnestRepository()
-      : proxy = ServerProxy('https://m.ugnest.com/rpc/v1')
+  UgnestRepository(String url)
+      : proxy = ServerProxy(url)
   {
     _authRepository = AuthRepository(proxy);
   }

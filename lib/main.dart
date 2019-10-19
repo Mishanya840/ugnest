@@ -45,7 +45,7 @@ void main() async {
   Logger.root.onRecord.listen((LogRecord rec) {
     print('${rec.level.name.padRight(10)}: ${rec.time}: ${rec.message}');
   });
-  final ugnestRepository = UgnestRepository();
+  final ugnestRepository = UgnestRepository('https://m.ugnest.com/rpc/v1');
   runApp(
     Provider(
       builder: (context) => ugnestRepository,
