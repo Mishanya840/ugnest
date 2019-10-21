@@ -1,21 +1,25 @@
 library ugnest_repositories;
 
-import 'package:jsonrpc2/jsonrpc_io_client.dart';
-
 import 'src/repository/auth_repository.dart';
+import 'src/repository/users_repository.dart';
+import 'src/server_proxy.dart';
 
+export 'src/model/models.dart';
 export 'src/repository/auth_repository.dart';
+export 'src/repository/users_repository.dart';
 export 'src/util/base_preferences.dart';
 
-class  UgnestRepository {
-  final ServerProxy proxy;
+class UgnestRepository {
+  final SimpleServerProxy proxy;
 
   AuthRepository _authRepository;
+  UsersRepository _usersRepository;
 
   UgnestRepository(String url)
-      : proxy = ServerProxy(url)
+      : proxy = SimpleServerProxy(url)
   {
     _authRepository = AuthRepository(proxy);
+    _usersRepository = UsersRepository(proxy);
   }
 
   void dispose() {
@@ -23,4 +27,5 @@ class  UgnestRepository {
   }
 
   AuthRepository get authRepository => _authRepository;
+  UsersRepository get usersRepository => _usersRepository;
 }

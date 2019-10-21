@@ -1,19 +1,18 @@
-import 'package:flutter/material.dart';
-
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loggable/loggable.dart';
+import 'package:logging/logging.dart';
 import 'package:provider/provider.dart';
+import 'package:ugnest/authentication/authentication.dart';
+import 'package:ugnest/common/common.dart';
+import 'package:ugnest/home/home.dart';
+import 'package:ugnest/home/profile/bloc.dart';
+import 'package:ugnest/login/login.dart';
+import 'package:ugnest/splash/splash.dart';
 import 'package:ugnest/user_notification/user_notification_bloc.dart';
 import 'package:ugnest_repositories/ugnest_repositories.dart';
-
-import 'package:ugnest/authentication/authentication.dart';
-import 'package:ugnest/splash/splash.dart';
-import 'package:ugnest/login/login.dart';
-import 'package:ugnest/home/home.dart';
-import 'package:ugnest/common/common.dart';
-import 'package:logging/logging.dart';
 
 class SimpleBlocDelegate extends BlocDelegate with Loggable {
   @override
@@ -31,7 +30,7 @@ class SimpleBlocDelegate extends BlocDelegate with Loggable {
   @override
   void onError(Bloc bloc, Object error, StackTrace stacktrace) {
     super.onError(bloc, error, stacktrace);
-    log.warning('${bloc.runtimeType}: $error');
+    log.warning('${bloc.runtimeType}: $error, $stacktrace');
   }
 }
 
@@ -47,12 +46,15 @@ void main() async {
   });
   final ugnestRepository = UgnestRepository('https://m.ugnest.com/rpc/v1');
   runApp(
-    Provider(
+    Provider<UgnestRepository>(
       builder: (context) => ugnestRepository,
       dispose: (context, value) => value.dispose(),
       child: BlocProvider<AuthenticationBloc>(
         builder: (context) {
-          return AuthenticationBloc(authRepository: ugnestRepository.authRepository)
+          return AuthenticationBloc(
+            authRepository: ugnestRepository.authRepository,
+            usersRepository: ugnestRepository.usersRepository
+          )
             ..add(AppStarted());
         },
         child: App(authRepository: ugnestRepository.authRepository),
@@ -79,7 +81,13 @@ class App extends StatelessWidget {
         home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
           builder: (context, state) {
             if (state is AuthenticationAuthenticated) {
-              return HomePage();
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<HomePageBloc>(builder: (_) => HomePageBloc()),
+                  BlocProvider<ProfileBloc>(builder: (_) => ProfileBloc(Provider.of<UgnestRepository>(context).usersRepository)..add(RequestUserInfo())),
+                ],
+                  child: HomePage()
+              );
             }
             if (state is AuthenticationUnauthenticated) {
               return LoginPage(authRepository: authRepository);

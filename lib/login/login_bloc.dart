@@ -1,14 +1,13 @@
 import 'dart:async';
 
+import 'package:bloc/bloc.dart';
+import 'package:jsonrpc2/client_base.dart';
 import 'package:loggable/loggable.dart';
 import 'package:meta/meta.dart';
-import 'package:bloc/bloc.dart';
-import 'package:ugnest/user_notification/bloc.dart';
-import 'package:ugnest_repositories/ugnest_repositories.dart';
-
 import 'package:ugnest/authentication/authentication.dart';
 import 'package:ugnest/login/login.dart';
-import 'package:jsonrpc2/client_base.dart';
+import 'package:ugnest/user_notification/bloc.dart';
+import 'package:ugnest_repositories/ugnest_repositories.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> with Loggable {
   final AuthRepository authRepository;
@@ -101,9 +100,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> with Loggable {
   }
 
   Stream<LoginState> _handleBackToWelcome(BackToWelcome event) async* {
-    if (state is CheckRegistrationLoginState) {
-      yield WelcomeLoginState();
-    }
+    yield WelcomeLoginState();
   }
 
   Stream<LoginState> _handleSelectedLoginByNumber(SelectedLoginByNumber event) async* {

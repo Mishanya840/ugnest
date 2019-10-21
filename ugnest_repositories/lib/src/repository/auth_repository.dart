@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:loggable/loggable.dart';
 import 'package:meta/meta.dart';
 import 'package:ugnest_repositories/src/util/base_preferences.dart';
-import 'package:jsonrpc2/jsonrpc_io_client.dart';
-import 'package:loggable/loggable.dart';
+
+import '../server_proxy.dart';
 import '../util/server_proxy_util.dart';
 
 class AuthRepository with Loggable {
-  final ServerProxy _proxy;
+  final SimpleServerProxy _proxy;
 
   AuthRepository(this._proxy);
 

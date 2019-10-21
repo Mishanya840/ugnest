@@ -1,16 +1,17 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
-import 'package:ugnest_repositories/ugnest_repositories.dart';
-
+import 'package:jsonrpc2/client_base.dart';
+import 'package:meta/meta.dart';
 import 'package:ugnest/authentication/authentication.dart';
+import 'package:ugnest_repositories/ugnest_repositories.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final AuthRepository authRepository;
+  final UsersRepository usersRepository;
 
-  AuthenticationBloc({@required this.authRepository})
+  AuthenticationBloc({@required this.authRepository, @required this.usersRepository})
       : assert(authRepository != null);
 
   @override
@@ -24,7 +25,12 @@ class AuthenticationBloc
       final String token = await BasePreferences.getAuthToken();
 
       if (token?.isNotEmpty ?? false) {
-        yield AuthenticationAuthenticated();
+        try {
+          await usersRepository.me();
+          yield AuthenticationAuthenticated();
+        } on RemoteException catch (e) {
+          yield AuthenticationUnauthenticated();
+        }
       } else {
         yield AuthenticationUnauthenticated();
       }
